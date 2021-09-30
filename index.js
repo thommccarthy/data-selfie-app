@@ -11,6 +11,12 @@ app.use(express.static('public'));
 const database = new Datastore('database.db');
 database.loadDatabase();
 
+app.get('/api', (request, response) => {
+  database.find({}, (err, data) => {
+    response.json(data);
+  });
+});
+
 //if a post request is sent to the route '/api', respond with an object in json format. it's friendly to include a status message.
 app.post('/api', (request, response) => {
   console.log('I got a request');
@@ -19,10 +25,5 @@ app.post('/api', (request, response) => {
   data.timestamp = timestamp;
   console.log(data);
   database.insert(data);
-  response.json({
-    status: 'success',
-    timestamp: timestamp,
-    latitude: data.lat,
-    longitude: data.long,
-  });
+  response.json(data);
 });
